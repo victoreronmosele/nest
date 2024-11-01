@@ -1,5 +1,5 @@
 ---
-name: Flock - A feature that Flutter won't fix
+name: Flock - A feature that Flutter won't implement
 about: Suggest a feature that you think should be in the Flutter framework
 title: "[Flock][Feature] - A good feature title here"
 labels: feature, flock
