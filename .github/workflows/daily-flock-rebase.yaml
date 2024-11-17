@@ -51,14 +51,6 @@ jobs:
           git config --global user.email "${{ github.actor }}@users.noreply.github.com"
           git config --global user.name "${{ github.actor }}"
 
-          # Store the PAT in a file that can be accessed by the
-          # GitHub CLI.
-          #echo "$GITHUB_PAT" > token.txt
-
-          # Authorize GitHub CLI for the current repository and
-          # create a pull-requests containing the updates.
-          #gh auth login --with-token < token.txt
-
           # Setup upstream to Flutter and fetch the latest from master.
           git remote add upstream https://github.com/flutter/flutter.git
           git fetch upstream master
