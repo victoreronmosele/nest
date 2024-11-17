@@ -87,7 +87,7 @@ jobs:
         run: |
           echo "Apply patches..."
           cd nest
-          python -u tools/git-import-patches.py patches
+          ./tools/git-import-patches patches
 
       - name: Force push master branch to Flock
         working-directory: nest/flock
