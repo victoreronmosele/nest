@@ -24,7 +24,7 @@ permissions:
   contents: write
 
 jobs:
-  rebase-flock-on-flutter:
+  rebase-flock-on-flutter_master:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Nest
@@ -53,7 +53,7 @@ jobs:
 
           # Setup upstream to Flutter and fetch the latest from master.
           git remote add upstream https://github.com/flutter/flutter.git
-          git fetch upstream master
+          git fetch upstream master --depth=0
 
       - name: Delete master, recreate, replay Flock
         working-directory: nest/flock
@@ -93,3 +93,75 @@ jobs:
           gh auth login --with-token < token.txt
 
           git push -f origin master
+  
+  rebase-flock-on-flutter_stable:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Nest
+        uses: actions/checkout@v4
+        with:
+          path: 'nest'
+          fetch-depth: 0 # Checkout everything to get access to the tags
+          repository: ${{github.repository}}
+          # ref: ${{github.event.pull_request.head.ref}}
+          ref: stable
+          token: ${{ env.GITHUB_PAT }}
+
+      - name: Checkout Flock
+        uses: actions/checkout@v4
+        with:
+          path: 'nest/flock'
+          fetch-depth: 0 # Checkout everything to get access to the tags
+          repository: ${{ env.FLOCK_REPO }}
+          # ref: ${{ env.FLUTTER_BRANCH }}
+          ref: stable
+          token: ${{ env.GITHUB_PAT }}
+
+      - name: Fetch Flutter stable
+        working-directory: nest/flock
+        run: |
+          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+          git config --global user.name "${{ github.actor }}"
+
+          # Setup upstream to Flutter and fetch the latest from stable.
+          git remote add upstream https://github.com/flutter/flutter.git
+          git fetch upstream stable --depth=0
+
+      - name: Delete stable, recreate, replay Flock
+        working-directory: nest/flock
+        run: |
+          # Checkout a temporary branch so we can manipulate stable.
+          git checkout -b temp
+
+          # Delete stable branch
+          git branch -D stable
+
+          # Get fresh version from Flutter.
+          git switch -c stable upstream/stable
+
+          # Switch back to the refreshed stable branch.
+          git checkout stable
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Apply Nest patches to Flock
+        run: |
+          echo "Apply patches..."
+          cd nest
+          ./tools/git-import-patches patches
+
+      - name: Force push stable branch to Flock
+        working-directory: nest/flock
+        run: |
+          # Store the PAT in a file that can be accessed by the
+          # GitHub CLI.
+          echo "$GITHUB_PAT" > token.txt
+
+          # Authorize GitHub CLI for the current repository and
+          # create a pull-requests containing the updates.
+          gh auth login --with-token < token.txt
+
+          git push -f origin stable
