@@ -136,7 +136,7 @@ jobs:
           # Lookup the tag that currently points to the beta branch. There
           # should always be one.
           echo "Fetching tags"
-          git fetch --tags --quiet
+          git fetch upstream --tags --quiet
 
           echo "Looking up beta tag"
           TAG=$(git tag --points-at $(git rev-parse beta))
@@ -227,7 +227,7 @@ jobs:
           # Lookup the tag that currently points to the stable branch. There
           # should always be one.
           echo "Fetching tags"
-          git fetch --tags --quiet
+          git fetch upstream --tags --quiet
 
           echo "Looking up stable tag"
           TAG=$(git tag --points-at $(git rev-parse stable))
