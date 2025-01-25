@@ -17,6 +17,7 @@ env:
   #
   #  - "FLOCK_REPO": The GitHub location of your Flutter fork.
   #                  WARNING: THIS WORKFLOW WILL DESTROY HISTORY IN THIS REPO!!
+  FLOCK_REPO: ${{ vars.FLOCK_REPO }}
 
   # A Personal Access Token (PAT) so that this action can destroy and create
   # history in the `FLOCK_REPO`.
@@ -36,7 +37,6 @@ jobs:
         config: [master, beta, stable]
 
     env:
-      FLOCK_REPO: ${{ vars.FLOCK_REPO }}
       FLUTTER_BRANCH: ${{ matrix.config }}
 
     steps:
@@ -50,7 +50,7 @@ jobs:
         with:
           path: 'nest'
           fetch-depth: 0 # Checkout everything to get access to the tags
-          repository: ${{github.repository}}
+          repository: ${{ github.repository }}
           # TODO: checkout the associated Nest branch
           ref: main
           token: ${{ env.GITHUB_PAT }}
@@ -60,8 +60,8 @@ jobs:
         with:
           path: 'nest/flock'
           fetch-depth: 0 # Checkout everything to get access to the tags
-          repository: $FLOCK_REPO
-          ref: $FLUTTER_BRANCH
+          repository: ${{ FLOCK_REPO }}
+          ref: ${{ FLUTTER_BRANCH }}
           token: ${{ env.GITHUB_PAT }}
 
       - name: Fetch Flutter master
