@@ -30,6 +30,11 @@ jobs:
   rebase-flock-on-flutter_master:
     runs-on: ubuntu-latest
     steps:
+      - name: Pre-Flight Checks
+        run: |
+          echo "Flutter branch: ${{ env.FLUTTER_BRANCH }}"
+          echo "Flock Repository: ${{ env.FLOCK_REPO }}"
+
       - name: Checkout Nest (this repo)
         uses: actions/checkout@v4
         with:
@@ -101,6 +106,11 @@ jobs:
   rebase-flock-on-flutter_beta:
     runs-on: ubuntu-latest
     steps:
+      - name: Pre-Flight Checks
+        run: |
+          echo "Flutter branch: ${{ env.FLUTTER_BRANCH }}"
+          echo "Flock Repository: ${{ env.FLOCK_REPO }}"
+
       - name: Checkout Nest
         uses: actions/checkout@v4
         with:
@@ -187,6 +197,11 @@ jobs:
   rebase-flock-on-flutter_stable:
     runs-on: ubuntu-latest
     steps:
+      - name: Pre-Flight Checks
+        run: |
+          echo "Flutter branch: ${{ env.FLUTTER_BRANCH }}"
+          echo "Flock Repository: ${{ env.FLOCK_REPO }}"
+          
       - name: Checkout Nest
         uses: actions/checkout@v4
         with:
