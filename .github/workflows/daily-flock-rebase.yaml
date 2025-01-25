@@ -13,9 +13,10 @@ on:
 
 # Update these variables to fit your custom fork configuration.
 env:
-  # The GitHub location of your Flutter fork.
-  # WARNING: THIS WORKFLOW WILL DESTROY HISTORY IN THIS REPO!!
-  FLOCK_REPO: "join-the-flock/flock"
+  # Expected GitHub repository variables:
+  #
+  #  - "FLOCK_REPO": The GitHub location of your Flutter fork.
+  #                  WARNING: THIS WORKFLOW WILL DESTROY HISTORY IN THIS REPO!!
 
   # A Personal Access Token (PAT) so that this action can destroy and create
   # history in the `FLOCK_REPO`.
