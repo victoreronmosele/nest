@@ -64,13 +64,13 @@ jobs:
           ref: ${{ env.FLUTTER_BRANCH }}
           token: ${{ env.GITHUB_PAT }}
 
-      - name: Fetch Flutter master
+      - name: Fetch Flutter branch
         working-directory: nest/flock
         run: |
           git config --global user.email "${{ github.actor }}@users.noreply.github.com"
           git config --global user.name "${{ github.actor }}"
 
-          # Setup upstream to Flutter and fetch the latest from master.
+          # Setup upstream to Flutter and fetch the latest from the desired branch.
           git remote add upstream https://github.com/flutter/flutter.git
           git fetch upstream ${{ env.FLUTTER_BRANCH }}
 
@@ -84,9 +84,9 @@ jobs:
           git branch -D ${{ env.FLUTTER_BRANCH }}
 
           # Get fresh version from Flutter.
-          git switch -c ${{ env.FLUTTER_BRANCH }} upstream/master
+          git switch -c ${{ env.FLUTTER_BRANCH }} upstream/${{ env.FLUTTER_BRANCH}}
 
-          # Switch back to the refreshed master branch.
+          # Switch back to the refreshed desired branch.
           git checkout ${{ env.FLUTTER_BRANCH }}
 
       - name: Setup Python
