@@ -32,8 +32,8 @@ jobs:
     steps:
       - name: Pre-Flight Checks
         run: |
-          echo "Flutter branch: ${{ env.FLUTTER_BRANCH }}"
-          echo "Flock Repository: ${{ env.FLOCK_REPO }}"
+          echo "Flutter branch: ${FLUTTER_BRANCH}"
+          echo "Flock Repository: ${{ vars.FLOCK_REPO }}"
 
       - name: Checkout Nest (this repo)
         uses: actions/checkout@v4
@@ -49,8 +49,8 @@ jobs:
         with:
           path: 'nest/flock'
           fetch-depth: 0 # Checkout everything to get access to the tags
-          repository: ${{ env.FLOCK_REPO }}
-          ref: ${{ env.FLUTTER_BRANCH }}
+          repository: ${{ vars.FLOCK_REPO }}
+          ref: master
           token: ${{ env.GITHUB_PAT }}
 
       - name: Fetch Flutter master
@@ -108,8 +108,8 @@ jobs:
     steps:
       - name: Pre-Flight Checks
         run: |
-          echo "Flutter branch: ${{ env.FLUTTER_BRANCH }}"
-          echo "Flock Repository: ${{ env.FLOCK_REPO }}"
+          echo "Flutter branch: $FLUTTER_BRANCH"
+          echo "Flock Repository: ${{ vars.FLOCK_REPO }}"
 
       - name: Checkout Nest
         uses: actions/checkout@v4
@@ -126,8 +126,7 @@ jobs:
         with:
           path: 'nest/flock'
           fetch-depth: 0 # Checkout everything to get access to the tags
-          repository: ${{ env.FLOCK_REPO }}
-          # ref: ${{ env.FLUTTER_BRANCH }}
+          repository: ${{ vars.FLOCK_REPO }}
           ref: beta
           token: ${{ env.GITHUB_PAT }}
 
@@ -199,9 +198,9 @@ jobs:
     steps:
       - name: Pre-Flight Checks
         run: |
-          echo "Flutter branch: ${{ env.FLUTTER_BRANCH }}"
-          echo "Flock Repository: ${{ env.FLOCK_REPO }}"
-          
+          echo "Flutter branch: $FLUTTER_BRANCH"
+          echo "Flock Repository: ${{ vars.FLOCK_REPO }}"
+
       - name: Checkout Nest
         uses: actions/checkout@v4
         with:
@@ -217,8 +216,7 @@ jobs:
         with:
           path: 'nest/flock'
           fetch-depth: 0 # Checkout everything to get access to the tags
-          repository: ${{ env.FLOCK_REPO }}
-          # ref: ${{ env.FLUTTER_BRANCH }}
+          repository: ${{ vars.FLOCK_REPO }}
           ref: stable
           token: ${{ env.GITHUB_PAT }}
 
