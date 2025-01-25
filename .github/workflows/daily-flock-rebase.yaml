@@ -42,8 +42,8 @@ jobs:
     steps:
       - name: Pre-Flight Checks
         run: |
-          echo "Flock Repository: $FLOCK_REPO"
-          echo "Flutter branch: $FLUTTER_BRANCH"
+          echo "Flock Repository: ${{ env.FLOCK_REPO }}"
+          echo "Flutter branch: ${{ env.FLUTTER_BRANCH }}"
 
       - name: Checkout Nest (this repo)
         uses: actions/checkout@v4
@@ -60,8 +60,8 @@ jobs:
         with:
           path: 'nest/flock'
           fetch-depth: 0 # Checkout everything to get access to the tags
-          repository: ${ FLOCK_REPO }
-          ref: ${ FLUTTER_BRANCH }
+          repository: ${{ env.FLOCK_REPO }}
+          ref: ${{ env.FLUTTER_BRANCH }}
           token: ${{ env.GITHUB_PAT }}
 
       - name: Fetch Flutter master
@@ -72,7 +72,7 @@ jobs:
 
           # Setup upstream to Flutter and fetch the latest from master.
           git remote add upstream https://github.com/flutter/flutter.git
-          git fetch upstream $FLUTTER_BRANCH
+          git fetch upstream ${{ env.FLUTTER_BRANCH }}
 
       - name: Delete Flock branch, recreate, replay Flock
         working-directory: nest/flock
@@ -81,13 +81,13 @@ jobs:
           git checkout -b temp
 
           # Delete Flock branch
-          git branch -D $FLUTTER_BRANCH
+          git branch -D ${{ env.FLUTTER_BRANCH }}
 
           # Get fresh version from Flutter.
-          git switch -c $FLUTTER_BRANCH upstream/master
+          git switch -c ${{ env.FLUTTER_BRANCH }} upstream/master
 
           # Switch back to the refreshed master branch.
-          git checkout $FLUTTER_BRANCH
+          git checkout ${{ env.FLUTTER_BRANCH }}
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -112,5 +112,5 @@ jobs:
           gh auth login --with-token < token.txt
 
           # Replace the previous Flock master branch with our updated branch.
-          git push -f origin $FLUTTER_BRANCH
+          git push -f origin ${{ env.FLUTTER_BRANCH }}
   
