@@ -133,16 +133,11 @@ jobs:
       - name: Lookup beta tag
         working-directory: nest/flock
         run: |
-          # Lookup the tag that currently points to the beta branch. There
-          # should always be one.
-          echo "Fetching tags"
-          git fetch upstream --tags --quiet
-
-          echo "Looking up beta tag"
-          TAG=$(git tag --points-at $(git rev-parse beta))
-
+          beta_commit=$(git ls-remote upstream refs/heads/beta | awk '{print $1}')
+          tag=$(git ls-remote --tags upstream | grep "$beta_commit" | awk -F'/' '{print $NF}')
+          
           echo "Beta tag: $TAG"
-          echo "tag=$TAG" >> $GITHUB_ENV
+          echo "tag=$tag" >> $GITHUB_ENV
 
       - name: Delete beta, recreate, replay Flock
         working-directory: nest/flock
@@ -224,16 +219,11 @@ jobs:
       - name: Lookup stable tag
         working-directory: nest/flock
         run: |
-          # Lookup the tag that currently points to the stable branch. There
-          # should always be one.
-          echo "Fetching tags"
-          git fetch upstream --tags --quiet
-
-          echo "Looking up stable tag"
-          TAG=$(git tag --points-at $(git rev-parse stable))
-
+          stable_commit=$(git ls-remote upstream refs/heads/stable | awk '{print $1}')
+          tag=$(git ls-remote --tags upstream | grep "$stable_commit" | awk -F'/' '{print $NF}')
+          
           echo "Stable tag: $TAG"
-          echo "tag=$TAG" >> $GITHUB_ENV
+          echo "tag=$tag" >> $GITHUB_ENV
 
       - name: Delete stable, recreate, replay Flock
         working-directory: nest/flock
