@@ -37,7 +37,7 @@ jobs:
 
     env:
       FLOCK_REPO: ${{ vars.FLOCK_REPO }}
-      FLUTTER_BRANCH: matrix.config
+      FLUTTER_BRANCH: ${{ matrix.config }}
 
     steps:
       - name: Pre-Flight Checks
