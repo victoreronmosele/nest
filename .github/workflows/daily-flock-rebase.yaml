@@ -81,7 +81,8 @@ jobs:
           commit=$(git ls-remote upstream refs/heads/${{ env.FLUTTER_BRANCH }} | awk '{print $1}')
           tag=$(git ls-remote --tags upstream | grep "$commit" | awk -F'/' '{print $NF}')
           
-          echo "Flutter branch tag (${{ env.FLUTTER_BRANCH }}): $TAG"
+          echo "${{ env.FLUTTER_BRANCH }} commit: $commit"
+          echo "${{ env.FLUTTER_BRANCH }} tag: $tag"
           echo "tag=$tag" >> $GITHUB_ENV
 
       - name: Delete Flock branch, recreate, replay Flock
