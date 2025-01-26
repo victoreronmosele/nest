@@ -73,6 +73,16 @@ jobs:
           # Setup upstream to Flutter and fetch the latest from the desired branch.
           git remote add upstream https://github.com/flutter/flutter.git
           git fetch upstream ${{ env.FLUTTER_BRANCH }}
+      
+      - name: Lookup Flutter branch tag (beta, stable)
+        if: ${{ env.FLUTTER_BRANCH == 'beta' || env.FLUTTER_BRANCH == 'stable' }}
+        working-directory: nest/flock
+        run: |
+          commit=$(git ls-remote upstream refs/heads/${{ env.FLUTTER_BRANCH }} | awk '{print $1}')
+          tag=$(git ls-remote --tags upstream | grep "$commit" | awk -F'/' '{print $NF}')
+          
+          echo "Flutter branch tag (${{ env.FLUTTER_BRANCH }}): $TAG"
+          echo "tag=$tag" >> $GITHUB_ENV
 
       - name: Delete Flock branch, recreate, replay Flock
         working-directory: nest/flock
@@ -99,6 +109,13 @@ jobs:
           echo "Apply patches..."
           cd nest
           ./tools/git-import-patches patches
+
+      - name: Apply Flutter branch tag to Flock
+        if: ${{ env.FLUTTER_BRANCH == 'beta' || env.FLUTTER_BRANCH == 'stable' }}
+        working-directory: nest/flock
+        run: |
+          echo "Tagging latest ${{ env.FLUTTER_BRANCH }} commit (${{ env.tag }})..."
+          git tag -f -a ${{ env.tag }} -m "Flock ${{ env.tag }}"
 
       - name: Force push updated branch to Flock
         working-directory: nest/flock
