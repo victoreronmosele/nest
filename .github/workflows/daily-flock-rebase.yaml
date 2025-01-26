@@ -116,6 +116,8 @@ jobs:
         working-directory: nest/flock
         run: |
           echo "Tagging latest ${{ env.FLUTTER_BRANCH }} commit (${{ env.tag }})..."
+          echo "Flock ${{ env.FLUTTER_BRANCH }} head commit: $(git rev-parse HEAD)"
+          echo "Tag: ${{ env.tag }}"
           git tag -f -a ${{ env.tag }} -m "Flock ${{ env.tag }}"
 
       - name: Force push updated branch to Flock
@@ -131,4 +133,10 @@ jobs:
 
           # Replace the previous Flock master branch with our updated branch.
           git push -f origin ${{ env.FLUTTER_BRANCH }}
+      
+      - name: Replace Flutter tag with Flock tag
+        if: ${{ env.FLUTTER_BRANCH == 'beta' || env.FLUTTER_BRANCH == 'stable' }}
+        working-directory: nest/flock
+        run: |
+          git push -f origin ${{ env.tag }}
   
