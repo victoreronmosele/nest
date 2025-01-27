@@ -52,8 +52,7 @@ jobs:
           path: 'nest'
           fetch-depth: 0 # Checkout everything to get access to the tags
           repository: ${{ github.repository }}
-          # TODO: checkout the associated Nest branch
-          ref: main
+          ref: ${{ env.FLUTTER_BRANCH == 'master' && 'main' || env.FLUTTER_BRANCH }}
           token: ${{ env.GITHUB_PAT }}
 
       - name: Checkout Flock
