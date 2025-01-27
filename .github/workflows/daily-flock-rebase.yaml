@@ -109,6 +109,7 @@ jobs:
           # and there is no corresponding engine build. To work around this, we tag
           # Flutter's latest commit on `master`, and then we adjust the script at
           # `bin/internal/update_dart_sdk.sh` to use the tagged hash for the engine.
+          git tag -d flock-engine-hash
           git tag -a flock-engine-hash -m "Engine hash for Flock"
 
       - name: Setup Python
