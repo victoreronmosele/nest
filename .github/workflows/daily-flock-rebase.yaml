@@ -110,6 +110,32 @@ jobs:
           echo "Apply patches..."
           cd nest
           ./tools/git-import-patches patches
+      
+      - name: Update engine stamp (master)
+        if: ${{ env.FLUTTER_BRANCH == 'master' }}
+        working-directory: nest/flock
+        run: |
+          # Flutter usually sets the engine hash on the end-users machine upon
+          # first use. However, that script sets the engine version to the hash
+          # of the most recent commit, which, in our case, would point to a Flock
+          # commit. There is no engine for each Flock commit. To deal with this,
+          # we explicitly create the engine.version file, and ament the latest
+          # Flock commit to include this file.
+
+          # Look up the latest commit hash for Flutter master.
+          flutter_master_head=$(git ls-remote upstream refs/heads/master | awk '{print $1}')
+          echo "Flutter master head: $flutter_master_head"
+
+          # Write the Flutter commit hash to engine.version.
+          touch bin/internal/engine.version
+          echo "$flutter_master_head" > bin/internal/engine.version
+
+          # Amend the most recent Flock commit with the engine.version file.
+          echo "Amending Flock with engine version..."
+          git add bin/internal/engine.version
+          git commit --amend --no-edit
+          echo "Done amending Flock with engine version."
+
 
       - name: Apply Flutter branch tag to Flock
         if: ${{ env.FLUTTER_BRANCH == 'beta' || env.FLUTTER_BRANCH == 'stable' }}
