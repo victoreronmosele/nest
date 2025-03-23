@@ -53,7 +53,10 @@ jobs:
         with:
           path: 'nest'
           fetch-depth: 0 # Checkout everything to get access to the tags
-          repository: ${{github.repository}}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          # Changed the below to the above after external contributor patch run failed.
+          # March 23, 2025 - Remove this commented section is above works in all cases.
+          # repository: ${{github.repository}}
           ref: ${{github.head_ref}}
           # Changed the below to the above after external contributor patch run failed.
           # March 23, 2025 - Remove this commented section is above works in all cases.
